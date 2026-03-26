@@ -73,15 +73,15 @@ public partial class BdLibraryContext : DbContext
             entity.Property(e => e.Pages).HasColumnName("pages");
             entity.Property(e => e.YearOfPublication).HasColumnName("year_of_publication");
 
-            entity.HasOne(d => d.IdAuthorNavigation).WithMany(p => p.Books)
+            entity.HasOne(d => d.Author).WithMany(p => p.Books)
                 .HasForeignKey(d => d.IdAuthor)
                 .HasConstraintName("books_id_author_fkey");
 
-            entity.HasOne(d => d.IdGenreNavigation).WithMany(p => p.Books)
+            entity.HasOne(d => d.Genre).WithMany(p => p.Books)
                 .HasForeignKey(d => d.IdGenre)
                 .HasConstraintName("books_id_genre_fkey");
 
-            entity.HasOne(d => d.IdPublishingHouseNavigation).WithMany(p => p.Books)
+            entity.HasOne(d => d.PublishingHouse).WithMany(p => p.Books)
                 .HasForeignKey(d => d.IdPublishingHouse)
                 .HasConstraintName("books_id_publishing_house_fkey");
         });
@@ -106,15 +106,15 @@ public partial class BdLibraryContext : DbContext
             entity.Property(e => e.PlannedReturnDate).HasColumnName("planned_return_date");
             entity.Property(e => e.ReturnDate).HasColumnName("return_date");
 
-            entity.HasOne(d => d.IdBooksNavigation).WithMany(p => p.BookLoans)
+            entity.HasOne(d => d.Book).WithMany(p => p.BookLoans)
                 .HasForeignKey(d => d.IdBooks)
                 .HasConstraintName("book_loans_id_books_fkey");
 
-            entity.HasOne(d => d.IdLibraryCardNavigation).WithMany(p => p.BookLoans)
+            entity.HasOne(d => d.LibraryCard).WithMany(p => p.BookLoans)
                 .HasForeignKey(d => d.IdLibraryCard)
                 .HasConstraintName("book_loans_id_library_card_fkey");
 
-            entity.HasOne(d => d.IdStatusNavigation).WithMany(p => p.BookLoans)
+            entity.HasOne(d => d.Status).WithMany(p => p.BookLoans)
                 .HasForeignKey(d => d.IdStatus)
                 .HasConstraintName("book_loans_id_status_fkey");
         });
@@ -186,11 +186,11 @@ public partial class BdLibraryContext : DbContext
             entity.Property(e => e.Login).HasColumnName("login");
             entity.Property(e => e.Password).HasColumnName("password");
 
-            entity.HasOne(d => d.IdLibraryCardNavigation).WithMany(p => p.Users)
+            entity.HasOne(d => d.LibraryCard).WithMany(p => p.Users)
                 .HasForeignKey(d => d.IdLibraryCard)
                 .HasConstraintName("users_id_library_card_fkey");
 
-            entity.HasOne(d => d.IdRoleNavigation).WithMany(p => p.Users)
+            entity.HasOne(d => d.Role).WithMany(p => p.Users)
                 .HasForeignKey(d => d.IdRole)
                 .HasConstraintName("users_id_role_fkey");
         });

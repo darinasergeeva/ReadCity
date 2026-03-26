@@ -45,7 +45,7 @@
             // 
             pictureBoxLogo.Image = (Image)resources.GetObject("pictureBoxLogo.Image");
             pictureBoxLogo.Location = new Point(144, 16);
-            pictureBoxLogo.Margin = new Padding(4, 4, 4, 4);
+            pictureBoxLogo.Margin = new Padding(4);
             pictureBoxLogo.Name = "pictureBoxLogo";
             pictureBoxLogo.Size = new Size(100, 100);
             pictureBoxLogo.SizeMode = PictureBoxSizeMode.Zoom;
@@ -78,6 +78,7 @@
             btnGuest.TabIndex = 5;
             btnGuest.Text = "Войти как гость";
             btnGuest.UseVisualStyleBackColor = false;
+            btnGuest.Click += BtnGuest_Click;
             // 
             // btnLogin
             // 
@@ -91,6 +92,7 @@
             btnLogin.TabIndex = 4;
             btnLogin.Text = "Войти";
             btnLogin.UseVisualStyleBackColor = false;
+            btnLogin.Click += BtnLogin_Click;
             // 
             // lbPassword
             // 
@@ -135,7 +137,7 @@
             Controls.Add(pnMain);
             Controls.Add(pictureBoxLogo);
             Font = new Font("Times New Roman", 12F, FontStyle.Regular, GraphicsUnit.Point, 204);
-            Margin = new Padding(4, 4, 4, 4);
+            Margin = new Padding(4);
             Name = "FormLogin";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Вход в систему";
