@@ -72,6 +72,7 @@
             btnLogut.TabStop = false;
             btnLogut.Text = "Выйти";
             btnLogut.UseVisualStyleBackColor = false;
+            btnLogut.Click += btnLogut_Click;
             // 
             // dgvBooks
             // 
@@ -95,7 +96,7 @@
             dataGridViewCellStyle1.WrapMode = DataGridViewTriState.False;
             dgvBooks.RowHeadersDefaultCellStyle = dataGridViewCellStyle1;
             dgvBooks.RowHeadersVisible = false;
-            dgvBooks.SelectionMode = DataGridViewSelectionMode.FullColumnSelect;
+            dgvBooks.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgvBooks.Size = new Size(964, 601);
             dgvBooks.TabIndex = 1;
             // 

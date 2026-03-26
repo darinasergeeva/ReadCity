@@ -59,5 +59,15 @@ namespace ReadCity.Properties {
                 resourceCulture = value;
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap book_placeholder {
+            get {
+                object obj = ResourceManager.GetObject("book_placeholder", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
     }
 }
