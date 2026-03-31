@@ -46,10 +46,10 @@
             txtISBN = new MaskedTextBox();
             lblISBN = new Label();
             groupCopies = new GroupBox();
-            txtTotalCopies = new MaskedTextBox();
-            lblTotal = new Label();
             txtAvailableCopies = new MaskedTextBox();
             lblAvailable = new Label();
+            txtTotalCopies = new MaskedTextBox();
+            lblTotal = new Label();
             groupAnnotation = new GroupBox();
             txtAnnotation = new TextBox();
             btnSave = new Button();
@@ -228,22 +228,6 @@
             groupCopies.TabIndex = 2;
             groupCopies.TabStop = false;
             // 
-            // txtTotalCopies
-            // 
-            txtTotalCopies.Location = new Point(165, 19);
-            txtTotalCopies.Name = "txtTotalCopies";
-            txtTotalCopies.Size = new Size(180, 26);
-            txtTotalCopies.TabIndex = 18;
-            // 
-            // lblTotal
-            // 
-            lblTotal.AutoSize = true;
-            lblTotal.Location = new Point(20, 22);
-            lblTotal.Name = "lblTotal";
-            lblTotal.Size = new Size(139, 19);
-            lblTotal.TabIndex = 17;
-            lblTotal.Text = "Всего экземпляров:";
-            // 
             // txtAvailableCopies
             // 
             txtAvailableCopies.Location = new Point(165, 57);
@@ -259,6 +243,22 @@
             lblAvailable.Size = new Size(78, 19);
             lblAvailable.TabIndex = 19;
             lblAvailable.Text = "Доступно:";
+            // 
+            // txtTotalCopies
+            // 
+            txtTotalCopies.Location = new Point(165, 19);
+            txtTotalCopies.Name = "txtTotalCopies";
+            txtTotalCopies.Size = new Size(180, 26);
+            txtTotalCopies.TabIndex = 18;
+            // 
+            // lblTotal
+            // 
+            lblTotal.AutoSize = true;
+            lblTotal.Location = new Point(20, 22);
+            lblTotal.Name = "lblTotal";
+            lblTotal.Size = new Size(139, 19);
+            lblTotal.TabIndex = 17;
+            lblTotal.Text = "Всего экземпляров:";
             // 
             // groupAnnotation
             // 
@@ -290,6 +290,7 @@
             btnSave.TabIndex = 4;
             btnSave.Text = "Сохранить";
             btnSave.UseVisualStyleBackColor = false;
+            btnSave.Click += btnSave_Click_1;
             // 
             // btnCancel
             // 
@@ -302,6 +303,7 @@
             btnCancel.TabIndex = 5;
             btnCancel.Text = "Отмена";
             btnCancel.UseVisualStyleBackColor = false;
+            btnCancel.Click += btnCancel_Click_1;
             // 
             // FormBookEdit
             // 
