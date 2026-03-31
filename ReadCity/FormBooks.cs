@@ -374,5 +374,20 @@ namespace ReadCity
                 loginForm.Show();
             }
         }
+
+        private void btnAddBook_Click(object sender, EventArgs e)
+        {
+            // Проверка, что окно редактирования не открыто
+            if (Application.OpenForms.OfType<FormBookEdit>().Any())
+            {
+                MessageBox.Show("Окно добавления/редактирования уже открыто.",
+                    "Внимание", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            var editForm = new FormBookEdit(null);
+            editForm.FormClosed += (s, args) => LoadBooks(); // Обновляем список после закрытия
+            editForm.ShowDialog();
+        }
     }
 }

@@ -30,6 +30,7 @@
         {
             DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
             panelTop = new Panel();
+            btnAddBook = new Button();
             lblUserName = new Label();
             btnLogut = new Button();
             dgvBooks = new DataGridView();
@@ -39,6 +40,7 @@
             // 
             // panelTop
             // 
+            panelTop.Controls.Add(btnAddBook);
             panelTop.Controls.Add(lblUserName);
             panelTop.Controls.Add(btnLogut);
             panelTop.Dock = DockStyle.Top;
@@ -46,6 +48,22 @@
             panelTop.Name = "panelTop";
             panelTop.Size = new Size(964, 40);
             panelTop.TabIndex = 0;
+            // 
+            // btnAddBook
+            // 
+            btnAddBook.BackColor = Color.FromArgb(74, 111, 165);
+            btnAddBook.BackgroundImageLayout = ImageLayout.Center;
+            btnAddBook.Dock = DockStyle.Left;
+            btnAddBook.FlatAppearance.BorderSize = 0;
+            btnAddBook.FlatStyle = FlatStyle.Flat;
+            btnAddBook.Location = new Point(0, 0);
+            btnAddBook.Name = "btnAddBook";
+            btnAddBook.Size = new Size(150, 40);
+            btnAddBook.TabIndex = 8;
+            btnAddBook.TabStop = false;
+            btnAddBook.Text = "Добавить";
+            btnAddBook.UseVisualStyleBackColor = false;
+            btnAddBook.Click += btnAddBook_Click;
             // 
             // lblUserName
             // 
@@ -126,5 +144,6 @@
         private Label lblUserName;
         private Button btnLogut;
         private DataGridView dgvBooks;
+        private Button btnAddBook;
     }
 }
