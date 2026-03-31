@@ -62,8 +62,6 @@ namespace ReadCity
             txtName.Text = _editingBook.NameBook;
             txtYear.Text = _editingBook.YearOfPublication.ToString();
             txtPages.Text = _editingBook.Pages.ToString();
-            txtTotalCopies.Text = _editingBook.Copies.ToString();
-            txtAvailableCopies.Text = _editingBook.Available.ToString();
             txtAnnotation.Text = _editingBook.Annotation;
 
             cbAuthor.SelectedValue = _editingBook.IdAuthor;
@@ -97,24 +95,6 @@ namespace ReadCity
                 MessageBox.Show("Введите корректное количество страниц (положительное число).", "Ошибка",
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
                 txtPages.Focus();
-                return false;
-            }
-
-            // Проверка общего количества
-            if (!int.TryParse(txtTotalCopies.Text, out int total) || total < 0)
-            {
-                MessageBox.Show("Введите корректное количество экземпляров (неотрицательное число).", "Ошибка",
-                    MessageBoxButtons.OK, MessageBoxIcon.Error);
-                txtTotalCopies.Focus();
-                return false;
-            }
-
-            // Проверка доступных
-            if (!int.TryParse(txtAvailableCopies.Text, out int available) || available < 0 || available > total)
-            {
-                MessageBox.Show($"Доступные экземпляры должны быть от 0 до {total}.", "Ошибка",
-                    MessageBoxButtons.OK, MessageBoxIcon.Error);
-                txtAvailableCopies.Focus();
                 return false;
             }
 
@@ -156,20 +136,22 @@ namespace ReadCity
                     {
                         // Редактирование книги
                         var book = db.Books.Find(_editingBook.Id);
-                        book.Isbn = txtISBN.Text;
-                        book.NameBook = txtName.Text;
-                        book.IdAuthor = (int)cbAuthor.SelectedValue;
-                        book.IdGenre = (int)cbGenre.SelectedValue;
-                        book.IdPublishingHouse = (int)cbPublisher.SelectedValue;
-                        book.YearOfPublication = int.Parse(txtYear.Text);
-                        book.Pages = int.Parse(txtPages.Text);
-                        book.Copies = int.Parse(txtTotalCopies.Text);
-                        book.Available = int.Parse(txtAvailableCopies.Text);
-                        book.Annotation = txtAnnotation.Text;
-                        db.SaveChanges();
+                        if (book != null)
+                        {
+                            book.Isbn = txtISBN.Text;
+                            book.NameBook = txtName.Text;
+                            book.IdAuthor = (int)cbAuthor.SelectedValue;
+                            book.IdGenre = (int)cbGenre.SelectedValue;
+                            book.IdPublishingHouse = (int)cbPublisher.SelectedValue;
+                            book.YearOfPublication = int.Parse(txtYear.Text);
+                            book.Pages = int.Parse(txtPages.Text);
+                            book.Annotation = txtAnnotation.Text;
 
-                        MessageBox.Show("Данные книги обновлены!", "Успешно",
-                            MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            db.SaveChanges();
+
+                            MessageBox.Show("Данные книги успешно обновлены!", "Успех",
+                                MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        }
                     }
                 }
 

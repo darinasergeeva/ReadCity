@@ -310,7 +310,7 @@
             AutoScaleDimensions = new SizeF(9F, 19F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.White;
-            ClientSize = new Size(534, 666);
+            ClientSize = new Size(534, 613);
             Controls.Add(btnCancel);
             Controls.Add(btnSave);
             Controls.Add(groupAnnotation);

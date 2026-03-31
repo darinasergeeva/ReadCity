@@ -74,6 +74,13 @@ namespace ReadCity
             colAvailable.FillWeight = 15;
             dgvBooks.Columns.Add(colAvailable);
 
+            DataGridViewTextBoxColumn colId = new DataGridViewTextBoxColumn();
+            colId.Name = "colId";
+            colId.HeaderText = "ID";
+            colId.Visible = false;  // Скрытая колонка
+            dgvBooks.Columns.Add(colId);
+
+
             dgvBooks.RowTemplate.Height = 70;
             dgvBooks.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
             dgvBooks.AllowUserToAddRows = false;
@@ -265,17 +272,20 @@ namespace ReadCity
                 int rowIndex = dgvBooks.Rows.Add();
                 var row = dgvBooks.Rows[rowIndex];
 
-                // Обложка 
+                // Обложка
                 row.Cells[0].Value = GetSmallPlaceholder();
                 row.Cells[0].Style.Alignment = DataGridViewContentAlignment.MiddleCenter;
 
-                // Информация о книге 
+                // Информация о книге
                 row.Cells[1].Value = FormatBookInfoCompact(book);
 
                 // Доступность
                 row.Cells[2].Value = $"{book.Available}";
                 row.Cells[2].Style.Alignment = DataGridViewContentAlignment.MiddleCenter;
                 row.Cells[2].Style.Font = new Font("Times New Roman", 11, FontStyle.Bold);
+
+
+                row.Cells[3].Value = book.Id;
 
                 ApplyRowStyles(row, book);
             }
@@ -389,5 +399,54 @@ namespace ReadCity
             editForm.FormClosed += (s, args) => LoadBooks(); // Обновляем список после закрытия
             editForm.ShowDialog();
         }
-    }
+
+        private void btnEditBook_Click(object sender, EventArgs e)
+        {
+            // Проверка, выбрана ли книга
+            if (dgvBooks.SelectedRows.Count == 0)
+            {
+                MessageBox.Show("Пожалуйста, выберите книгу для редактирования.\n\n" +
+                                "Для выбора книги щелкните по строке с книгой.",
+                                "Внимание",
+                                MessageBoxButtons.OK,
+                                MessageBoxIcon.Warning);
+                return;
+            }
+
+            // Проверка, что окно редактирования не открыто
+            if (Application.OpenForms.OfType<FormBookEdit>().Any())
+            {
+                MessageBox.Show("Окно редактирования уже открыто.\n\n" +
+                                "Закройте его перед редактированием другой книги.",
+                                "Внимание",
+                                MessageBoxButtons.OK,
+                                MessageBoxIcon.Warning);
+                return;
+            }
+
+            // Получаем ID книги из скрытой колонки
+            int bookId = Convert.ToInt32(dgvBooks.SelectedRows[0].Cells[3].Value);
+
+            using (var db = new BdLibraryContext())
+            {
+                var book = db.Books
+                    .Include(b => b.Author)
+                    .Include(b => b.Genre)
+                    .Include(b => b.PublishingHouse)
+                    .FirstOrDefault(b => b.Id == bookId);  
+
+                if (book != null)
+                {
+                    var editForm = new FormBookEdit(book);
+                    editForm.FormClosed += (s, args) => LoadBooks();
+                    editForm.ShowDialog();
+                }
+                else
+                {
+                    MessageBox.Show($"Книга с ID = {bookId} не найдена в базе данных.", "Ошибка",
+                        MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+        }
+    } 
 }
