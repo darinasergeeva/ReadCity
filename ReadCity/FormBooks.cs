@@ -433,7 +433,7 @@ namespace ReadCity
                     .Include(b => b.Author)
                     .Include(b => b.Genre)
                     .Include(b => b.PublishingHouse)
-                    .FirstOrDefault(b => b.Id == bookId);  
+                    .FirstOrDefault(b => b.Id == bookId);
 
                 if (book != null)
                 {
@@ -448,5 +448,49 @@ namespace ReadCity
                 }
             }
         }
-    } 
+
+        private void btnDelete_Click(object sender, EventArgs e)
+        {
+            if (dgvBooks.SelectedRows.Count == 0)
+            {
+                MessageBox.Show("Пожалуйста, выберите книгу для удаления.",
+                    "Внимание", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            int bookId = Convert.ToInt32(dgvBooks.SelectedRows[0].Cells[3].Value);
+
+            using (var db = new BdLibraryContext())
+            {
+                // Проверка, есть ли у книги выдачи
+                var hasLoans = db.BookLoans.Any(bl => bl.IdBooks == bookId);
+
+                if (hasLoans)
+                {
+                    MessageBox.Show("Невозможно удалить книгу, так как она присутствует в выдаче читателям.",
+                        "Ошибка удаления", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
+                DialogResult result = MessageBox.Show("Вы уверены, что хотите удалить эту книгу?",
+                    "Подтверждение удаления", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+                if (result == DialogResult.Yes)
+                {
+                    var book = db.Books.Find(bookId);
+                    if (book != null)
+                    {
+
+                        db.Books.Remove(book);
+                        db.SaveChanges();
+
+                        LoadBooks();
+
+                        MessageBox.Show("Книга успешно удалена.", "Успешно",
+                            MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+                }
+            }
+        }
+    }
 }

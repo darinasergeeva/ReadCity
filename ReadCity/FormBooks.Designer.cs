@@ -30,6 +30,7 @@
         {
             DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
             panelTop = new Panel();
+            btnDelete = new Button();
             btnEditBook = new Button();
             btnAddBook = new Button();
             lblUserName = new Label();
@@ -41,6 +42,7 @@
             // 
             // panelTop
             // 
+            panelTop.Controls.Add(btnDelete);
             panelTop.Controls.Add(btnEditBook);
             panelTop.Controls.Add(btnAddBook);
             panelTop.Controls.Add(lblUserName);
@@ -50,6 +52,21 @@
             panelTop.Name = "panelTop";
             panelTop.Size = new Size(964, 40);
             panelTop.TabIndex = 0;
+            // 
+            // btnDelete
+            // 
+            btnDelete.BackColor = Color.FromArgb(74, 111, 165);
+            btnDelete.BackgroundImageLayout = ImageLayout.Center;
+            btnDelete.FlatAppearance.BorderSize = 0;
+            btnDelete.FlatStyle = FlatStyle.Flat;
+            btnDelete.Location = new Point(365, 0);
+            btnDelete.Name = "btnDelete";
+            btnDelete.Size = new Size(150, 40);
+            btnDelete.TabIndex = 10;
+            btnDelete.TabStop = false;
+            btnDelete.Text = "Удалить";
+            btnDelete.UseVisualStyleBackColor = false;
+            btnDelete.Click += btnDelete_Click;
             // 
             // btnEditBook
             // 
@@ -163,5 +180,6 @@
         private DataGridView dgvBooks;
         private Button btnAddBook;
         private Button btnEditBook;
+        private Button btnDelete;
     }
 }
