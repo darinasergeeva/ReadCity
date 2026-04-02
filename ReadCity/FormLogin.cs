@@ -1,11 +1,7 @@
-﻿using Microsoft.VisualBasic.ApplicationServices;
+﻿using Microsoft.EntityFrameworkCore;
 using ReadCity.Models;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Text;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace ReadCity
@@ -14,6 +10,7 @@ namespace ReadCity
     {
         public Models.User CurrentUser { get; private set; }
         public bool IsGuest { get; private set; }
+
         public FormLogin()
         {
             InitializeComponent();
@@ -31,6 +28,7 @@ namespace ReadCity
             using (var db = new BdLibraryContext())
             {
                 var user = db.Users
+                    .Include(u => u.Role)  
                     .Where(w => w.Login == txtLogin.Text && w.Password == txtPassword.Text)
                     .FirstOrDefault();
 
@@ -38,16 +36,23 @@ namespace ReadCity
                 {
                     CurrentUser = user;
                     IsGuest = false;
+
+                    
+                    string roleName = user.Role?.NameRole ?? "Роль не загружена";
+                    MessageBox.Show($"Добро пожаловать, {user.FullName}!\nВаша роль: {roleName}",
+                        "Успешный вход",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Information);
+
                     this.DialogResult = DialogResult.OK;
                     this.Close();
                 }
                 else
                 {
                     MessageBox.Show("Неверный логин или пароль", "Ошибка",
-                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
-
         }
 
         private void BtnGuest_Click(object sender, EventArgs e)
@@ -59,4 +64,3 @@ namespace ReadCity
         }
     }
 }
-

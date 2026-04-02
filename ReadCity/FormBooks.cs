@@ -40,7 +40,25 @@ namespace ReadCity
             // Создаем панель поиска 
             CreateSearchFilterPanel();
 
+            ShowOrHideAdminButtons();
+
             LoadBooks();
+        }
+
+        private void ShowOrHideAdminButtons()
+        {
+            // Проверяем, является ли пользователь администратором
+            bool isAdmin = !IsGuest && CurrentUser?.Role?.NameRole == "Администратор";
+
+            // Показываем кнопки только если админ, иначе скрываем
+            if (btnAddBook != null)
+                btnAddBook.Visible = isAdmin;
+
+            if (btnEditBook != null)
+                btnEditBook.Visible = isAdmin;
+
+            if (btnDelete != null)
+                btnDelete.Visible = isAdmin;
         }
 
         private void ConfigureDataGridView()
