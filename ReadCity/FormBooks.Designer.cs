@@ -30,6 +30,7 @@
         {
             DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
             panelTop = new Panel();
+            btnLoans = new Button();
             btnDelete = new Button();
             btnEditBook = new Button();
             btnAddBook = new Button();
@@ -42,6 +43,7 @@
             // 
             // panelTop
             // 
+            panelTop.Controls.Add(btnLoans);
             panelTop.Controls.Add(btnDelete);
             panelTop.Controls.Add(btnEditBook);
             panelTop.Controls.Add(btnAddBook);
@@ -52,6 +54,21 @@
             panelTop.Name = "panelTop";
             panelTop.Size = new Size(964, 40);
             panelTop.TabIndex = 0;
+            // 
+            // btnLoans
+            // 
+            btnLoans.BackColor = Color.FromArgb(74, 111, 165);
+            btnLoans.BackgroundImageLayout = ImageLayout.Center;
+            btnLoans.FlatAppearance.BorderSize = 0;
+            btnLoans.FlatStyle = FlatStyle.Flat;
+            btnLoans.Location = new Point(548, 0);
+            btnLoans.Name = "btnLoans";
+            btnLoans.Size = new Size(150, 40);
+            btnLoans.TabIndex = 11;
+            btnLoans.TabStop = false;
+            btnLoans.Text = "Выдача книг";
+            btnLoans.UseVisualStyleBackColor = false;
+            btnLoans.Click += btnLoans_Click;
             // 
             // btnDelete
             // 
@@ -181,5 +198,6 @@
         private Button btnAddBook;
         private Button btnEditBook;
         private Button btnDelete;
+        private Button btnLoans;
     }
 }

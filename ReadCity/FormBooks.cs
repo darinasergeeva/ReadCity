@@ -510,5 +510,11 @@ namespace ReadCity
                 }
             }
         }
+
+        private void btnLoans_Click(object sender, EventArgs e)
+        {
+            var loansForm = new FormBookLoans(CurrentUser, IsGuest);
+            loansForm.ShowDialog();
+        }
     }
 }
