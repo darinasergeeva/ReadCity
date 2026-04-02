@@ -49,8 +49,8 @@ namespace ReadCity
             if (btnAddLoan != null)
                 btnAddLoan.Visible = canManage;
 
-            if (btnReturnBook != null)
-                btnReturnBook.Visible = canManage;
+            if (btnEditLoan != null)
+                btnEditLoan.Visible = canManage;
 
             if (btnDeleteLoan != null)
                 btnDeleteLoan.Visible = canManage;
@@ -244,85 +244,7 @@ namespace ReadCity
             }
         }
 
-        private void btnReturnBook_Click(object sender, EventArgs e)
-        {
-            if (dgvLoans.SelectedRows.Count == 0)
-            {
-                MessageBox.Show("Пожалуйста, выберите выдачу для возврата книги.\n\n" +
-                                "Для выбора щелкните по строке с книгой.",
-                    "Внимание", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
 
-            int loanId = Convert.ToInt32(dgvLoans.SelectedRows[0].Cells[6].Value);
-            string bookName = dgvLoans.SelectedRows[0].Cells[0].Value.ToString().Split('\n')[0];
-            string readerName = dgvLoans.SelectedRows[0].Cells[1].Value.ToString();
-
-            // Проверяем, не возвращена ли уже книга
-            string returnDate = dgvLoans.SelectedRows[0].Cells[4].Value.ToString();
-            if (returnDate != "Не возвращена")
-            {
-                MessageBox.Show($"Книга \"{bookName}\" уже возвращена.",
-                    "Внимание", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-
-            DialogResult result = MessageBox.Show($"Вы уверены, что хотите вернуть книгу?\n\n" +
-                                                  $"Книга: {bookName}\n" +
-                                                  $"Читатель: {readerName}",
-                "Подтверждение возврата",
-                MessageBoxButtons.YesNo,
-                MessageBoxIcon.Question);
-
-            if (result == DialogResult.Yes)
-            {
-                try
-                {
-                    using (var db = new BdLibraryContext())
-                    {
-                        var loan = db.BookLoans.Find(loanId);
-                        if (loan != null && loan.ReturnDate == null)
-                        {
-                            // Устанавливаем дату возврата
-                            loan.ReturnDate = DateOnly.FromDateTime(DateTime.Now);
-
-                            // Обновляем статус (если есть поле статуса)
-                            if (loan.IdStatus != 0)
-                            {
-                                var returnedStatus = db.Statuses.FirstOrDefault(s => s.NameStatus == "Возвращена");
-                                if (returnedStatus != null)
-                                {
-                                    loan.IdStatus = returnedStatus.Id;
-                                }
-                            }
-
-                            // Увеличиваем количество доступных экземпляров книги
-                            var book = db.Books.Find(loan.IdBooks);
-                            if (book != null)
-                            {
-                                book.Available++;
-                            }
-
-                            db.SaveChanges();
-
-                            MessageBox.Show($"Книга \"{bookName}\" успешно возвращена!\n" +
-                                           $"Читатель: {readerName}\n" +
-                                           $"Дата возврата: {DateTime.Now:dd.MM.yyyy}",
-                                           "Успех",
-                                           MessageBoxButtons.OK,
-                                           MessageBoxIcon.Information);
-
-                            LoadLoans(); // Обновляем список
-                        }
-                    }
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show($"Ошибка при возврате книги: {ex.Message}", "Ошибка",
-                        MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-            }
-        }
 
         private void btnDeleteLoan_Click(object sender, EventArgs e)
         {
@@ -364,6 +286,49 @@ namespace ReadCity
                 catch (Exception ex)
                 {
                     MessageBox.Show($"Ошибка при удалении: {ex.Message}", "Ошибка",
+                        MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+        }
+        private void btnRefresh_Click(object sender, EventArgs e)
+        {
+            LoadLoans();
+        }
+
+        private void btnEditLoan_Click(object sender, EventArgs e)
+        {
+            if (dgvLoans.SelectedRows.Count == 0)
+            {
+                MessageBox.Show("Пожалуйста, выберите запись для редактирования.",
+                    "Внимание", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            if (Application.OpenForms.OfType<FormLoanEdit>().Any())
+            {
+                MessageBox.Show("Окно редактирования уже открыто.",
+                    "Внимание", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            int loanId = Convert.ToInt32(dgvLoans.SelectedRows[0].Cells[6].Value);
+
+            using (var db = new BdLibraryContext())
+            {
+                var loan = db.BookLoans
+                    .Include(l => l.Book)
+                    .Include(l => l.LibraryCard)
+                    .FirstOrDefault(l => l.Id == loanId);
+
+                if (loan != null)
+                {
+                    var editForm = new FormLoanEdit(loan);
+                    editForm.FormClosed += (s, args) => LoadLoans(); // ЭТО ВАЖНО - обновляет таблицу
+                    editForm.ShowDialog();
+                }
+                else
+                {
+                    MessageBox.Show("Запись не найдена.", "Ошибка",
                         MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }

@@ -8,12 +8,27 @@ namespace ReadCity
 {
     public partial class FormLoanEdit : Form
     {
+        private BookLoan _editingLoan;
+        private bool _isEditMode;
+
+        
         public FormLoanEdit()
         {
             InitializeComponent();
+            _isEditMode = false;
             LoadComboBoxes();
+            numDays.ValueChanged += NumDays_ValueChanged;
+            CalculateReturnDate();
+        }
 
-            // Подписка на изменение срока выдачи
+        
+        public FormLoanEdit(BookLoan loan)
+        {
+            InitializeComponent();
+            _editingLoan = loan;
+            _isEditMode = true;
+            LoadComboBoxes();
+            LoadLoanData();
             numDays.ValueChanged += NumDays_ValueChanged;
             CalculateReturnDate();
         }
@@ -22,11 +37,16 @@ namespace ReadCity
         {
             using (var db = new BdLibraryContext())
             {
-                // Загрузка книг 
+                // При редактировании показываем все книги, при добавлении - только доступные
                 var books = db.Books
-                    .Where(b => b.Available > 0)
                     .OrderBy(b => b.NameBook)
                     .ToList();
+
+                // Если это режим добавления, фильтруем только доступные книги
+                if (!_isEditMode)
+                {
+                    books = books.Where(b => b.Available > 0).ToList();
+                }
 
                 cbBook.DisplayMember = "NameBook";
                 cbBook.ValueMember = "Id";
@@ -34,7 +54,7 @@ namespace ReadCity
 
                 if (cbBook.Items.Count == 0)
                 {
-                    cbBook.Items.Add("Нет доступных книг");
+                    cbBook.Items.Add(_isEditMode ? "Нет книг" : "Нет доступных книг");
                     cbBook.Enabled = false;
                 }
 
@@ -51,6 +71,28 @@ namespace ReadCity
                 {
                     cbReader.Items.Add("Нет читателей");
                     cbReader.Enabled = false;
+                }
+
+                // При редактировании устанавливаем значения
+                if (_isEditMode && _editingLoan != null)
+                {
+                    cbBook.SelectedValue = _editingLoan.IdBooks;
+                    cbReader.SelectedValue = _editingLoan.IdLibraryCard;
+                }
+            }
+        }
+
+        
+        private void LoadLoanData()
+        {
+            if (_editingLoan == null) return;
+
+            if (_editingLoan.PlannedReturnDate != null)
+            {
+                int daysDiff = (_editingLoan.PlannedReturnDate.ToDateTime(TimeOnly.MinValue) - DateTime.Now).Days;
+                if (daysDiff > 0 && daysDiff <= 60)
+                {
+                    numDays.Value = daysDiff;
                 }
             }
         }
@@ -94,51 +136,60 @@ namespace ReadCity
             {
                 using (var db = new BdLibraryContext())
                 {
-                    int bookId = (int)cbBook.SelectedValue;
-                    int readerId = (int)cbReader.SelectedValue;
-
-                    // Проверка, что книга ещё доступна
-                    var book = db.Books.Find(bookId);
-                    if (book == null || book.Available <= 0)
+                    if (_isEditMode)
                     {
-                        MessageBox.Show("Эта книга уже недоступна для выдачи.", "Ошибка",
-                            MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        return;
+                        var loan = db.BookLoans.Find(_editingLoan.Id);
+                        if (loan != null)
+                        {
+                            loan.PlannedReturnDate = DateOnly.FromDateTime(DateTime.Now.AddDays((int)numDays.Value));
+                            db.SaveChanges();
+
+                            MessageBox.Show($"Данные выдачи успешно обновлены!", "Успех",
+                                MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        }
                     }
-
-                    // Получаем первый статус из таблицы Statuses
-                    var firstStatus = db.Statuses.FirstOrDefault();
-                    if (firstStatus == null)
+                    else
                     {
-                        MessageBox.Show("В базе данных нет статусов. Обратитесь к администратору.", "Ошибка",
-                            MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        return;
+                        int bookId = (int)cbBook.SelectedValue;
+                        int readerId = (int)cbReader.SelectedValue;
+
+                        var book = db.Books.Find(bookId);
+                        if (book == null || book.Available <= 0)
+                        {
+                            MessageBox.Show("Эта книга уже недоступна для выдачи.", "Ошибка",
+                                MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            return;
+                        }
+
+                        var firstStatus = db.Statuses.FirstOrDefault();
+                        if (firstStatus == null)
+                        {
+                            MessageBox.Show("В базе данных нет статусов. Обратитесь к администратору.", "Ошибка",
+                                MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            return;
+                        }
+
+                        var loan = new BookLoan
+                        {
+                            IdBooks = bookId,
+                            IdLibraryCard = readerId,
+                            DateOfIssue = DateOnly.FromDateTime(DateTime.Now),
+                            PlannedReturnDate = DateOnly.FromDateTime(DateTime.Now.AddDays((int)numDays.Value)),
+                            ReturnDate = null,
+                            IdStatus = firstStatus.Id
+                        };
+
+                        db.BookLoans.Add(loan);
+                        book.Available--;
+                        db.SaveChanges();
+
+                        MessageBox.Show($"Книга \"{book.NameBook}\" успешно выдана!\n" +
+                                       $"Читатель: {cbReader.Text}\n" +
+                                       $"Дата возврата: {lblReturnDateValue.Text}",
+                                       "Успех",
+                                       MessageBoxButtons.OK,
+                                       MessageBoxIcon.Information);
                     }
-
-                    // Создаем запись о выдаче
-                    var loan = new BookLoan
-                    {
-                        IdBooks = bookId,
-                        IdLibraryCard = readerId,
-                        DateOfIssue = DateOnly.FromDateTime(DateTime.Now),
-                        PlannedReturnDate = DateOnly.FromDateTime(DateTime.Now.AddDays((int)numDays.Value)),
-                        ReturnDate = null,
-                        IdStatus = firstStatus.Id  // Используем ID первого статуса
-                    };
-
-                    db.BookLoans.Add(loan);
-
-                    // Уменьшаем количество доступных экземпляров
-                    book.Available--;
-
-                    db.SaveChanges();
-
-                    MessageBox.Show($"Книга \"{book.NameBook}\" успешно выдана!\n" +
-                                   $"Читатель: {cbReader.Text}\n" +
-                                   $"Дата возврата: {lblReturnDateValue.Text}",
-                                   "Успех",
-                                   MessageBoxButtons.OK,
-                                   MessageBoxIcon.Information);
 
                     this.DialogResult = DialogResult.OK;
                     this.Close();
