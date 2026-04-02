@@ -28,9 +28,9 @@
         /// </summary>
         private void InitializeComponent()
         {
-            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
-            btnDelete = new Button();
-            btnEdit = new Button();
+            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
+            btnDeleteLoan = new Button();
+            btnReturnBook = new Button();
             btnAddLoan = new Button();
             panelTop = new Panel();
             lblUserName = new Label();
@@ -40,33 +40,35 @@
             ((System.ComponentModel.ISupportInitialize)dgvLoans).BeginInit();
             SuspendLayout();
             // 
-            // btnDelete
+            // btnDeleteLoan
             // 
-            btnDelete.BackColor = Color.FromArgb(74, 111, 165);
-            btnDelete.BackgroundImageLayout = ImageLayout.Center;
-            btnDelete.FlatAppearance.BorderSize = 0;
-            btnDelete.FlatStyle = FlatStyle.Flat;
-            btnDelete.Location = new Point(365, 0);
-            btnDelete.Name = "btnDelete";
-            btnDelete.Size = new Size(150, 40);
-            btnDelete.TabIndex = 10;
-            btnDelete.TabStop = false;
-            btnDelete.Text = "Удалить";
-            btnDelete.UseVisualStyleBackColor = false;
+            btnDeleteLoan.BackColor = Color.FromArgb(74, 111, 165);
+            btnDeleteLoan.BackgroundImageLayout = ImageLayout.Center;
+            btnDeleteLoan.FlatAppearance.BorderSize = 0;
+            btnDeleteLoan.FlatStyle = FlatStyle.Flat;
+            btnDeleteLoan.Location = new Point(365, 0);
+            btnDeleteLoan.Name = "btnDeleteLoan";
+            btnDeleteLoan.Size = new Size(150, 40);
+            btnDeleteLoan.TabIndex = 10;
+            btnDeleteLoan.TabStop = false;
+            btnDeleteLoan.Text = "Удалить";
+            btnDeleteLoan.UseVisualStyleBackColor = false;
+            btnDeleteLoan.Click += btnDeleteLoan_Click;
             // 
-            // btnEdit
+            // btnReturnBook
             // 
-            btnEdit.BackColor = Color.FromArgb(74, 111, 165);
-            btnEdit.BackgroundImageLayout = ImageLayout.Center;
-            btnEdit.FlatAppearance.BorderSize = 0;
-            btnEdit.FlatStyle = FlatStyle.Flat;
-            btnEdit.Location = new Point(181, 0);
-            btnEdit.Name = "btnEdit";
-            btnEdit.Size = new Size(150, 40);
-            btnEdit.TabIndex = 9;
-            btnEdit.TabStop = false;
-            btnEdit.Text = "Редактировать";
-            btnEdit.UseVisualStyleBackColor = false;
+            btnReturnBook.BackColor = Color.FromArgb(74, 111, 165);
+            btnReturnBook.BackgroundImageLayout = ImageLayout.Center;
+            btnReturnBook.FlatAppearance.BorderSize = 0;
+            btnReturnBook.FlatStyle = FlatStyle.Flat;
+            btnReturnBook.Location = new Point(181, 0);
+            btnReturnBook.Name = "btnReturnBook";
+            btnReturnBook.Size = new Size(150, 40);
+            btnReturnBook.TabIndex = 9;
+            btnReturnBook.TabStop = false;
+            btnReturnBook.Text = "Редактировать";
+            btnReturnBook.UseVisualStyleBackColor = false;
+            btnReturnBook.Click += btnReturnBook_Click;
             // 
             // btnAddLoan
             // 
@@ -86,8 +88,8 @@
             // 
             // panelTop
             // 
-            panelTop.Controls.Add(btnDelete);
-            panelTop.Controls.Add(btnEdit);
+            panelTop.Controls.Add(btnDeleteLoan);
+            panelTop.Controls.Add(btnReturnBook);
             panelTop.Controls.Add(btnAddLoan);
             panelTop.Controls.Add(lblUserName);
             panelTop.Controls.Add(btnLogut);
@@ -137,14 +139,14 @@
             dgvLoans.MultiSelect = false;
             dgvLoans.Name = "dgvLoans";
             dgvLoans.ReadOnly = true;
-            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle2.BackColor = SystemColors.Control;
-            dataGridViewCellStyle2.Font = new Font("Times New Roman", 12F, FontStyle.Regular, GraphicsUnit.Point, 204);
-            dataGridViewCellStyle2.ForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle2.SelectionBackColor = SystemColors.Highlight;
-            dataGridViewCellStyle2.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle2.WrapMode = DataGridViewTriState.False;
-            dgvLoans.RowHeadersDefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle1.BackColor = SystemColors.Control;
+            dataGridViewCellStyle1.Font = new Font("Times New Roman", 12F, FontStyle.Regular, GraphicsUnit.Point, 204);
+            dataGridViewCellStyle1.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle1.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = DataGridViewTriState.False;
+            dgvLoans.RowHeadersDefaultCellStyle = dataGridViewCellStyle1;
             dgvLoans.RowHeadersVisible = false;
             dgvLoans.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgvLoans.Size = new Size(1029, 530);
@@ -169,8 +171,8 @@
 
         #endregion
 
-        private Button btnDelete;
-        private Button btnEdit;
+        private Button btnDeleteLoan;
+        private Button btnReturnBook;
         private Button btnAddLoan;
         private Panel panelTop;
         private Label lblUserName;

@@ -22,7 +22,7 @@ namespace ReadCity
         {
             using (var db = new BdLibraryContext())
             {
-                // Загрузка книг (только тех, у которых есть доступные экземпляры)
+                // Загрузка книг 
                 var books = db.Books
                     .Where(b => b.Available > 0)
                     .OrderBy(b => b.NameBook)
@@ -38,7 +38,7 @@ namespace ReadCity
                     cbBook.Enabled = false;
                 }
 
-                // Загрузка читателей (библиотечные карты)
+                // Загрузка читателей
                 var readers = db.LibraryCards
                     .OrderBy(r => r.NameLibraryCard)
                     .ToList();
