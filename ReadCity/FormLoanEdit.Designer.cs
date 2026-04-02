@@ -128,6 +128,7 @@
             btnCancel.TabIndex = 10;
             btnCancel.Text = "Отмена";
             btnCancel.UseVisualStyleBackColor = false;
+            btnCancel.Click += btnCancel_Click;
             // 
             // btnSave
             // 
@@ -140,6 +141,7 @@
             btnSave.TabIndex = 9;
             btnSave.Text = "Сохранить";
             btnSave.UseVisualStyleBackColor = false;
+            btnSave.Click += btnSave_Click;
             // 
             // FormLoanEdit
             // 

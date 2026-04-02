@@ -35,6 +35,19 @@ namespace ReadCity
             }
 
             LoadLoans();
+
+            ShowOrHideAdminButtons();
+        }
+
+        private void ShowOrHideAdminButtons()
+        {
+            // Проверяем, может ли пользователь управлять выдачами (Администратор или Библиотекарь)
+            string roleName = CurrentUser?.Role?.NameRole ?? "null";
+            bool canManage = !IsGuest && (roleName == "Администратор" || roleName == "Библиотекарь");
+
+            // Показываем кнопку выдачи только если может управлять
+            if (btnAddLoan != null)
+                btnAddLoan.Visible = canManage;
         }
 
         private void ConfigureDataGridView()
@@ -205,7 +218,14 @@ namespace ReadCity
             formBooks.Show();
         }
 
-        private void btnLogout_Click(object sender, EventArgs e)
+        private void btnAddLoan_Click(object sender, EventArgs e)
+        {
+            var loanForm = new FormLoanEdit();
+            loanForm.FormClosed += (s, args) => LoadLoans(); // Обновляем список после выдачи
+            loanForm.ShowDialog();
+        }
+
+        private void btnLogut_Click(object sender, EventArgs e)
         {
             DialogResult result = MessageBox.Show("Выйти из системы?", "Выход",
                 MessageBoxButtons.YesNo, MessageBoxIcon.Question);

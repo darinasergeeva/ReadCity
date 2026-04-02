@@ -82,6 +82,7 @@
             btnAddLoan.TabStop = false;
             btnAddLoan.Text = "Добавить";
             btnAddLoan.UseVisualStyleBackColor = false;
+            btnAddLoan.Click += btnAddLoan_Click;
             // 
             // panelTop
             // 
@@ -121,6 +122,7 @@
             btnLogut.TabStop = false;
             btnLogut.Text = "Выйти";
             btnLogut.UseVisualStyleBackColor = false;
+            btnLogut.Click += btnLogut_Click;
             // 
             // dgvLoans
             // 
