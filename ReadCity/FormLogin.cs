@@ -28,7 +28,7 @@ namespace ReadCity
             using (var db = new BdLibraryContext())
             {
                 var user = db.Users
-                    .Include(u => u.Role)  
+                    .Include(u => u.Role)
                     .Where(w => w.Login == txtLogin.Text && w.Password == txtPassword.Text)
                     .FirstOrDefault();
 
@@ -37,7 +37,7 @@ namespace ReadCity
                     CurrentUser = user;
                     IsGuest = false;
 
-                    
+
                     string roleName = user.Role?.NameRole ?? "Роль не загружена";
                     MessageBox.Show($"Добро пожаловать, {user.FullName}!\nВаша роль: {roleName}",
                         "Успешный вход",
@@ -61,6 +61,11 @@ namespace ReadCity
             IsGuest = true;
             this.DialogResult = DialogResult.OK;
             this.Close();
+        }
+
+        private void txtLogin_TextChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }

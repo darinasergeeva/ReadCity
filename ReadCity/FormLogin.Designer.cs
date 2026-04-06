@@ -65,6 +65,7 @@
             pnMain.Name = "pnMain";
             pnMain.Size = new Size(322, 220);
             pnMain.TabIndex = 2;
+            pnMain.Paint += this.pnMain_Paint;
             // 
             // btnGuest
             // 
@@ -102,6 +103,7 @@
             lbPassword.Size = new Size(58, 19);
             lbPassword.TabIndex = 3;
             lbPassword.Text = "Пароль";
+            lbPassword.Click += this.lbPassword_Click;
             // 
             // txtPassword
             // 
@@ -110,6 +112,7 @@
             txtPassword.Size = new Size(250, 26);
             txtPassword.TabIndex = 2;
             txtPassword.UseSystemPasswordChar = true;
+            txtPassword.TextChanged += this.txtPassword_TextChanged;
             // 
             // txtLogin
             // 
@@ -118,6 +121,7 @@
             txtLogin.Size = new Size(250, 26);
             txtLogin.TabIndex = 1;
             txtLogin.UseSystemPasswordChar = true;
+            txtLogin.TextChanged += txtLogin_TextChanged;
             // 
             // lblogin
             // 
@@ -127,6 +131,7 @@
             lblogin.Size = new Size(52, 19);
             lblogin.TabIndex = 0;
             lblogin.Text = "Логин";
+            lblogin.Click += this.lblogin_Click;
             // 
             // FormLogin
             // 
